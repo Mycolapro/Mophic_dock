@@ -1,24 +1,12 @@
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
-const exampleMessages = [
-  {
-    heading: 'What is GPT-4o mini?',
-    message: 'What is GPT-4o mini?'
-  },
-  {
-    heading: 'Why is Nvidia growing rapidly?',
-    message: 'Why is Nvidia growing rapidly?'
-  },
-  {
-    heading: 'How does the Vercel AI SDK work?',
-    message: 'How does the Vercel AI SDK work?'
-  },
-  {
-    heading: 'Tesla vs Rivian',
-    message: 'Tesla vs Rivian'
-  }
-]
+const fetchExampleMessages = async () => {
+  const response = await fetch('/api/topics')
+  return response.json().then((data) => data.prompts)
+}
+
 export function EmptyScreen({
   submitMessage,
   className
@@ -26,6 +14,16 @@ export function EmptyScreen({
   submitMessage: (message: string) => void
   className?: string
 }) {
+  const [exampleMessages, setExampleMessages] = useState<{ message: string; heading: string }[]>([])
+
+  useEffect(() => {
+    const loadMessages = async () => {
+      const messages = await fetchExampleMessages()
+      setExampleMessages(messages)
+    }
+    loadMessages()
+  }, [])
+
   return (
     <div className={`mx-auto w-full transition-all ${className}`}>
       <div className="bg-background p-2">
