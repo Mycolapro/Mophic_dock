@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - file: ./Dockerfile
+          - file: ./prod.Dockerfile
             image_name: morphic
 
     steps:
